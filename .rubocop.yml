@@ -1,0 +1,115 @@
+require:
+  - rubocop-rails
+  - rubocop-rspec
+
+AllCops:
+  TargetRubyVersion: 3.0
+  Exclude:
+    - "app/validators/codigo_cns_validator.rb"
+    - "app/validators/email_validator.rb"
+    - "app/validators/pis_pasep_validator.rb"
+    - "app/validators/nome_validator.rb"
+    - "config/initializers/string.rb"
+    - "config/application.rb"
+    - "config/spring.rb"
+    - "config/puma.rb"
+    - "lib/constantine.rb"
+    - "bin/*"
+    - "vendor/bundle/**/*"
+
+Metrics/LineLength:
+  Description: "Limit lines to 100 characters."
+  Max: 110
+  Enabled: true
+  Exclude:
+    - "spec/**/*.rb"
+    - "config/environments/*.rb"
+
+Metrics/AbcSize:
+  Exclude:
+    - "db/migrate/*.rb"
+
+Metrics/BlockLength:
+  Exclude:
+    - "Rakefile"
+    - "**/*.rake"
+    - "spec/**/*.rb"
+    - "db/migrate/*.rb"
+    - "config/initializers/inflections.rb"
+    - "config/routes.rb"
+
+Metrics/ClassLength:
+  Exclude:
+    - "app/models/**/*.rb"
+    - "db/migrate/*.rb"
+
+Metrics/MethodLength:
+  Exclude:
+    - "db/migrate/**/*.rb"
+
+Lint/AmbiguousBlockAssociation:
+  Exclude:
+    - "spec/**/*"
+
+Rails/SkipsModelValidations:
+  Enabled: false
+
+RSpec/AnyInstance:
+  Enabled: false
+
+RSpec/BeforeAfterAll:
+  Enabled: false
+
+RSpec/ContextMethod:
+  Enabled: false
+
+RSpec/ContextWording:
+  Enabled: false
+
+RSpec/ExpectChange:
+  Enabled: false
+
+RSpec/LeadingSubject:
+  Enabled: false
+
+RSpec/LeakyConstantDeclaration:
+  Enabled: false
+
+RSpec/LetSetup:
+  Enabled: false
+
+RSpec/NestedGroups:
+  Max: 10
+
+RSpec/MessageSpies:
+  Enabled: false
+
+RSpec/MultipleExpectations:
+  Enabled: false
+
+RSpec/NamedSubject:
+  Enabled: false
+
+RSpec/ImplicitSubject:
+  Enabled: false
+
+RSpec/InstanceVariable:
+  Enabled: false
+
+RSpec/SubjectStub:
+  Enabled: false
+
+RSpec/VerifiedDoubles:
+  Enabled: false
+
+RSpec/VoidExpect:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/AsciiComments:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
