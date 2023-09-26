@@ -1,0 +1,5 @@
+pt-BR:
+  errors:
+    messages:
+      required: não pode ficar em branco
+      blank: não pode ficar em branco

@@ -1,0 +1,43 @@
+pt-BR:
+  activerecord:
+    models:
+      user:
+        one: Usuário
+        other: Usuários
+    attributes:
+      user:
+        name: Nome
+        email: Email
+        password_digest: Senha
+    errors:
+      models:
+        user:
+          not_found: Usuário não encontrado
+          attributes:
+            password_digest:
+              too_short: "precisa ter no mínimo %{count} caracteres"
+            email:
+              taken: em uso, digite outro
+              invalid: invalido, digite um email valido
+
+en:
+  activerecord:
+    models:
+      user:
+        one: User
+        other: Users
+    attributes:
+      user:
+        name: Name
+        email: Email
+        password_digest: Password
+    errors:
+      models:
+        user:
+          not_found: User not found
+          attributes:
+            password_digest:
+              too_short: "must have at least %{count} characters"
+            email:
+              taken: in use, enter another
+              invalid: invalid, enter a valid email

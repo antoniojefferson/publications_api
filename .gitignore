@@ -36,4 +36,5 @@
 /tests
 /coverage
 config/database.yml
+db/schema.rb
 .env
