@@ -21,5 +21,6 @@ RSpec.configure do |config|
   config.render_views
 
   # Include helpers
+  config.include AuthSpecHelper
   config.include ResponseSpecHelper
 end

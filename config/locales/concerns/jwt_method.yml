@@ -1,0 +1,21 @@
+pt-BR:
+  activerecord:
+    errors:
+      jwt_methods:
+        token:
+          invalid: Erro de autenticação, token inválido
+          expired: Erro de autenticação, token expirado
+          missing: Erro, token ausente no cabeçalho de autenticação
+          payload:
+            invalid: Erro de autenticação, carga inválida
+
+en:
+  activerecord:
+    errors:
+      jwt_methods:
+        token:
+          invalid: Authentication error, invalid token
+          expired: Authentication error, expired token
+          missing: Error, missing token in authentication header
+          payload:
+            invalid: Authentication error, invalid payload

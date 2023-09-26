@@ -2,8 +2,9 @@ require 'rails_helper'
 
 RSpec.describe Api::V1::UsersController, type: :controller do
   let!(:user) { create :user }
-  let!(:user_to_creating) { build :user, email: 'examples@gmail.com' }
-  let!(:user_to_update) { build :user, id: user.id, email: 'corporate@gmail.com' }
+  let!(:user_to_creating) { build :user, email: FFaker::Internet.email }
+  let!(:user_to_update) { build :user, id: user.id, email: FFaker::Internet.email }
+  let(:token) { custom_sign_in user }
   let(:result) do
     {
       id: user.id,
@@ -34,6 +35,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   describe 'GET #index' do
     context 'when have return data' do
       before do
+        include_authenticated_header(token)
         get :index, format: :json
       end
 
@@ -50,6 +52,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   describe 'GET #show' do
     context 'when have return data' do
       before do
+        include_authenticated_header(token)
         get :show, format: :json, params: { id: user.id }
       end
 
@@ -64,6 +67,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when not have return data' do
       before do
+        include_authenticated_header(token)
         get :show, format: :json, params: { id: 100 }
       end
 
@@ -73,6 +77,20 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       it 'returns the error message' do
         expect(errors).to eq I18n.t('activerecord.errors.models.user.not_found')
+      end
+    end
+
+    context 'when there is no authentication' do
+      before do
+        get :show, format: :json, params: { id: user.id }
+      end
+
+      it 'returns unauthorized status' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the data' do
+        expect(errors).to eq I18n.t('activerecord.errors.jwt_methods.token.missing')
       end
     end
   end
@@ -98,6 +116,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when have data to save' do
       before do
+        include_authenticated_header(token)
         post :create, format: :json, params: user_to_creating.attributes
       end
 
@@ -112,6 +131,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when the name is empty' do
       before do
+        include_authenticated_header(token)
         post :create, params: { name: '', email: user.email, password: user.password_digest }
       end
 
@@ -126,6 +146,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when the email is empty' do
       before do
+        include_authenticated_header(token)
         post :create, params: { name: user.name, email: '', password: user.password_digest }
       end
 
@@ -140,6 +161,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when the password is empty' do
       before do
+        include_authenticated_header(token)
         post :create, params: { name: user.name, email: user.email, password: '' }
       end
 
@@ -154,6 +176,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when the password is too short' do
       before do
+        include_authenticated_header(token)
         post :create, params: { name: user.name, email: user.email, password: '35gmd' }
       end
 
@@ -165,11 +188,26 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(errors).to include(password_invalid)
       end
     end
+
+    context 'when there is no authentication' do
+      before do
+        get :show, format: :json, params: { id: user.id }
+      end
+
+      it 'returns unauthorized status' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the data' do
+        expect(errors).to eq I18n.t('activerecord.errors.jwt_methods.token.missing')
+      end
+    end
   end
 
   describe 'PUT #update' do
     context 'when have data to update' do
       before do
+        include_authenticated_header(token)
         put :update, format: :json, params: user_to_update.attributes
       end
 
@@ -196,6 +234,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       before do
+        include_authenticated_header(token)
         put :update, params: { id: user.id, name: '', email: '' }
       end
 
@@ -207,11 +246,26 @@ RSpec.describe Api::V1::UsersController, type: :controller do
         expect(errors).to eq errors_attribute
       end
     end
+
+    context 'when there is no authentication' do
+      before do
+        get :show, format: :json, params: { id: user.id }
+      end
+
+      it 'returns unauthorized status' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the data' do
+        expect(errors).to eq I18n.t('activerecord.errors.jwt_methods.token.missing')
+      end
+    end
   end
 
   describe 'DELETE #destroy' do
     context 'when have data to delete' do
       before do
+        include_authenticated_header(token)
         delete :destroy, format: :json, params: { id: user.id }
       end
 
@@ -226,6 +280,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when not have data to delete' do
       before do
+        include_authenticated_header(token)
         delete :destroy, params: { id: 100 }
       end
 
@@ -235,6 +290,20 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       it 'returns the error message' do
         expect(errors).to eq I18n.t('activerecord.errors.models.user.not_found')
+      end
+    end
+
+    context 'when there is no authentication' do
+      before do
+        get :show, format: :json, params: { id: user.id }
+      end
+
+      it 'returns unauthorized status' do
+        expect(response).to have_http_status(:unauthorized)
+      end
+
+      it 'returns the data' do
+        expect(errors).to eq I18n.t('activerecord.errors.jwt_methods.token.missing')
       end
     end
   end
