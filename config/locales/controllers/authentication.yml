@@ -1,0 +1,9 @@
+pt-BR:
+  messages:
+    errors:
+      invalid: Usuário ou senha inválido
+
+en:
+  messages:
+    errors:
+      invalid: Invalid username or password
