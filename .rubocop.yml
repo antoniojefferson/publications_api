@@ -16,6 +16,7 @@ AllCops:
     - "lib/constantine.rb"
     - "bin/*"
     - "vendor/bundle/**/*"
+    - "db/schema.rb"
 
 Metrics/LineLength:
   Description: "Limit lines to 100 characters."
@@ -104,6 +105,9 @@ RSpec/VerifiedDoubles:
 
 RSpec/VoidExpect:
   Enabled: false
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 20
 
 Style/FrozenStringLiteralComment:
   Enabled: false
