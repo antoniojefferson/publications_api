@@ -8,14 +8,14 @@ pt-BR:
       user:
         name: Nome
         email: Email
-        password_digest: Senha
+        password: Senha
     errors:
       models:
         user:
           not_found: Usuário não encontrado
           attributes:
-            password_digest:
-              too_short: "precisa ter no mínimo %{count} caracteres"
+            password:
+              too_short: é muito curto (mínimo de 6 caracteres)
             email:
               taken: em uso, digite outro
               invalid: invalido, digite um email valido
@@ -30,14 +30,14 @@ en:
       user:
         name: Name
         email: Email
-        password_digest: Password
+        password: Password
     errors:
       models:
         user:
           not_found: User not found
           attributes:
-            password_digest:
-              too_short: "must have at least %{count} characters"
+            password:
+              too_short: is too short (minimum is 6 characters)
             email:
               taken: in use, enter another
               invalid: invalid, enter a valid email
