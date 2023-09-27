@@ -2,6 +2,7 @@ module Api
   module V1
     class PostsController < ApplicationController
       before_action :set_post, except: %i[create index]
+      before_action :jwt_auth_validation, except: %i[index show]
 
       def index
         @posts = Post.all

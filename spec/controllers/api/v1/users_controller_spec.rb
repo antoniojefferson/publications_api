@@ -50,7 +50,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   describe 'GET #index' do
     context 'when have return data' do
       before do
-        include_authenticated_header(token)
         get :index, format: :json
       end
 
@@ -67,7 +66,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   describe 'GET #show' do
     context 'when have return data' do
       before do
-        include_authenticated_header(token)
         get :show, format: :json, params: { id: user.id }
       end
 
@@ -82,7 +80,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when not have return data' do
       before do
-        include_authenticated_header(token)
         get :show, format: :json, params: { id: 100 }
       end
 
@@ -92,20 +89,6 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       it 'returns the error message' do
         expect(errors).to eq I18n.t('activerecord.errors.models.user.not_found')
-      end
-    end
-
-    context 'when there is no authentication' do
-      before do
-        get :show, format: :json, params: { id: user.id }
-      end
-
-      it 'returns unauthorized status' do
-        expect(response).to have_http_status(:unauthorized)
-      end
-
-      it 'returns the data' do
-        expect(errors).to eq I18n.t('activerecord.errors.jwt_methods.token.missing')
       end
     end
   end
@@ -206,7 +189,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when there is no authentication' do
       before do
-        get :show, format: :json, params: { id: user.id }
+        post :create, format: :json, params: { name: user_to_creating.name, email: user_to_creating.email, password: user_to_creating.password }
       end
 
       it 'returns unauthorized status' do
@@ -268,7 +251,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when there is no authentication' do
       before do
-        get :show, format: :json, params: { id: user.id }
+        put :update, format: :json, params: { id: user_to_update.id, name: user_to_update.name, email: user_to_update.email, password: user_to_update.password }
       end
 
       it 'returns unauthorized status' do
@@ -314,7 +297,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
     context 'when there is no authentication' do
       before do
-        get :show, format: :json, params: { id: user.id }
+        delete :destroy, format: :json, params: { id: user.id }
       end
 
       it 'returns unauthorized status' do

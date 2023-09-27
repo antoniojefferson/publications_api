@@ -1,6 +1,7 @@
 module Api
   module V1
     class CommentsController < ApplicationController
+      skip_before_action :jwt_auth_validation
       before_action :set_comment, except: %i[create index]
 
       def index
