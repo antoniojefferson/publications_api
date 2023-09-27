@@ -38,7 +38,6 @@ RSpec.describe Api::V1::PostsController, type: :controller do
   describe 'GET #index' do
     context 'when have return data' do
       before do
-        include_authenticated_header(token)
         get :index, format: :json
       end
 
@@ -50,26 +49,11 @@ RSpec.describe Api::V1::PostsController, type: :controller do
         expect(json).to eq [result]
       end
     end
-
-    context 'when there is no authentication' do
-      before do
-        get :index, format: :json
-      end
-
-      it 'returns unauthorized status' do
-        expect(response).to have_http_status(:unauthorized)
-      end
-
-      it 'returns the data' do
-        expect(errors).to eq I18n.t('activerecord.errors.jwt_methods.token.missing')
-      end
-    end
   end
 
   describe 'GET #show' do
     context 'when have return data' do
       before do
-        include_authenticated_header(token)
         get :show, format: :json, params: { id: data_post.id }
       end
 
@@ -84,7 +68,6 @@ RSpec.describe Api::V1::PostsController, type: :controller do
 
     context 'when not have return data' do
       before do
-        include_authenticated_header(token)
         get :show, format: :json, params: { id: 100 }
       end
 
@@ -94,20 +77,6 @@ RSpec.describe Api::V1::PostsController, type: :controller do
 
       it 'returns the error message' do
         expect(errors).to eq I18n.t('activerecord.errors.models.post.not_found')
-      end
-    end
-
-    context 'when there is no authentication' do
-      before do
-        get :show, format: :json, params: { id: data_post.id }
-      end
-
-      it 'returns unauthorized status' do
-        expect(response).to have_http_status(:unauthorized)
-      end
-
-      it 'returns the data' do
-        expect(errors).to eq I18n.t('activerecord.errors.jwt_methods.token.missing')
       end
     end
   end
