@@ -12,6 +12,21 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       email: user.email
     }.stringify_keys
   end
+  let(:result_with_posts) do
+    {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      posts: user.posts.map do |post|
+        {
+          id: post.id,
+          title: post.title,
+          text: post.text,
+          comments: post.comments.map { |current_post| { id: current_post.id, name: current_post.name, comment: current_post.comment }.stringify_keys }
+        }
+      end
+    }.stringify_keys
+  end
   let(:result_creation) do
     {
       name: user_to_creating.name,
@@ -44,7 +59,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns the data' do
-        expect(json).to eq [result]
+        expect(json).to eq [result_with_posts]
       end
     end
   end
@@ -61,7 +76,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns the data' do
-        expect(json).to eq result
+        expect(json).to eq result_with_posts
       end
     end
 
@@ -98,10 +113,10 @@ RSpec.describe Api::V1::UsersController, type: :controller do
   describe 'POST #create' do
     let(:column_name) { I18n.t('activerecord.attributes.user.name') }
     let(:column_email) { I18n.t('activerecord.attributes.user.email') }
-    let(:column_password) { I18n.t('activerecord.attributes.user.password_digest') }
+    let(:column_password) { I18n.t('activerecord.attributes.user.password') }
     let(:email_invalid) { I18n.t('activerecord.errors.models.user.attributes.email.invalid') }
     let(:email_taken) { I18n.t('activerecord.errors.models.user.attributes.email.taken') }
-    let(:password_invalid) { I18n.t('activerecord.errors.models.user.attributes.password_digest.too_short', count: 6) }
+    let(:password_invalid) { I18n.t('activerecord.errors.models.user.attributes.password.too_short') }
     let(:message_blank) { I18n.t('errors.messages.blank') }
     let(:errors_attribute) do
       [
@@ -117,7 +132,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when have data to save' do
       before do
         include_authenticated_header(token)
-        post :create, format: :json, params: user_to_creating.attributes
+        post :create, format: :json, params: { name: user_to_creating.name, email: user_to_creating.email, password: user_to_creating.password }
       end
 
       it 'returns created status' do
@@ -132,7 +147,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when the name is empty' do
       before do
         include_authenticated_header(token)
-        post :create, params: { name: '', email: user.email, password: user.password_digest }
+        post :create, params: { name: '', email: user.email, password: user.password }
       end
 
       it 'returns unprocessable_entity status' do
@@ -147,7 +162,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when the email is empty' do
       before do
         include_authenticated_header(token)
-        post :create, params: { name: user.name, email: '', password: user.password_digest }
+        post :create, params: { name: user.name, email: '', password: user.password }
       end
 
       it 'returns unprocessable_entity status' do
@@ -177,7 +192,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when the password is too short' do
       before do
         include_authenticated_header(token)
-        post :create, params: { name: user.name, email: user.email, password: '35gmd' }
+        post :create, format: :json, params: { name: user.name, email: user_to_creating.email, password: '35gmd' }
       end
 
       it 'returns unprocessable_entity status' do
@@ -185,7 +200,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       end
 
       it 'returns the error message' do
-        expect(errors).to include(password_invalid)
+        expect(errors).to eq I18n.t('errors.format', attribute: column_password, message: password_invalid)
       end
     end
 
@@ -208,7 +223,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
     context 'when have data to update' do
       before do
         include_authenticated_header(token)
-        put :update, format: :json, params: user_to_update.attributes
+        put :update, format: :json, params: { id: user_to_update.id, name: user_to_update.name, email: user_to_update.email, password: user_to_update.password }
       end
 
       it 'returns ok status' do
@@ -224,10 +239,14 @@ RSpec.describe Api::V1::UsersController, type: :controller do
       let(:column_name) { I18n.t('activerecord.attributes.user.name') }
       let(:column_email) { I18n.t('activerecord.attributes.user.email') }
       let(:email_invalid) { I18n.t('activerecord.errors.models.user.attributes.email.invalid') }
+      let(:column_password) { I18n.t('activerecord.attributes.user.password') }
+      let(:password_invalid) { I18n.t('activerecord.errors.models.user.attributes.password.too_short') }
       let(:message_blank) { I18n.t('errors.messages.blank') }
       let(:errors_attribute) do
         [
           I18n.t('errors.format', attribute: column_name, message: message_blank),
+          I18n.t('errors.format', attribute: column_password, message: message_blank),
+          I18n.t('errors.format', attribute: column_password, message: password_invalid),
           I18n.t('errors.format', attribute: column_email, message: message_blank),
           I18n.t('errors.format', attribute: column_email, message: email_invalid)
         ].join(', ')
@@ -235,7 +254,7 @@ RSpec.describe Api::V1::UsersController, type: :controller do
 
       before do
         include_authenticated_header(token)
-        put :update, params: { id: user.id, name: '', email: '' }
+        put :update, params: { id: user.id, name: '', email: '', password: '' }
       end
 
       it 'returns unprocessable_entity status' do

@@ -6,16 +6,16 @@ RSpec.describe User, type: :model do
   context 'validations' do
     it { is_expected.to validate_presence_of :name }
     it { is_expected.to validate_presence_of :email }
-    it { is_expected.to validate_presence_of :password_digest }
+    it { is_expected.to validate_presence_of :password }
     it { is_expected.to validate_uniqueness_of :email }
   end
 
   describe 'is valid' do
     context 'when all data is valid' do
       before do
-        subject.name = 'Sophia'
-        subject.email = 'sophia@gmail.com'
-        subject.password_digest = 'Temp@123'
+        subject.name = FFaker::NameBR.first_name
+        subject.email = FFaker::Internet.email
+        subject.password = FFaker::Internet.password
       end
 
       it 'model is valid' do
@@ -27,7 +27,7 @@ RSpec.describe User, type: :model do
   describe 'is invalid' do
     let(:email_taken) { I18n.t('activerecord.errors.models.user.attributes.email.taken') }
     let(:email_invalid) { I18n.t('activerecord.errors.models.user.attributes.email.invalid') }
-    let(:password_invalid) { I18n.t('activerecord.errors.models.user.attributes.password_digest.too_short', count: 6) }
+    let(:password_invalid) { I18n.t('activerecord.errors.models.user.attributes.password.too_short', count: 6) }
     let(:message_blank) { I18n.t('errors.messages.blank') }
 
     context 'when name is not present' do
@@ -94,7 +94,7 @@ RSpec.describe User, type: :model do
 
     context 'when the password is not present' do
       before do
-        subject.password_digest = ''
+        subject.password = nil
       end
 
       it 'model is invalid' do
@@ -103,13 +103,13 @@ RSpec.describe User, type: :model do
 
       it 'returns error message for field' do
         subject.valid?
-        expect(subject.errors.messages[:password_digest]).to include(message_blank)
+        expect(subject.errors.messages[:password]).to include(message_blank)
       end
     end
 
     context 'when the password is not the minimum length' do
       before do
-        subject.password_digest = 'temp@'
+        subject.password = 'temp@'
       end
 
       it 'model is invalid' do
@@ -118,7 +118,7 @@ RSpec.describe User, type: :model do
 
       it 'returns error message for field' do
         subject.valid?
-        expect(subject.errors.messages[:password_digest]).to include(password_invalid)
+        expect(subject.errors.messages[:password]).to include(password_invalid)
       end
     end
   end
