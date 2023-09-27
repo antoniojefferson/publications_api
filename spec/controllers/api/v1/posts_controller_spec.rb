@@ -12,7 +12,7 @@ RSpec.describe Api::V1::PostsController, type: :controller do
       id: data_post.id,
       title: data_post.title,
       text: data_post.text,
-      comments: data_post.comments.map {|post| {id: post.id, name: post.name, comment: post.comment}.stringify_keys}
+      comments: data_post.comments.map { |post| { id: post.id, name: post.name, comment: post.comment }.stringify_keys }
     }.stringify_keys
   end
   let(:result_creation) do
