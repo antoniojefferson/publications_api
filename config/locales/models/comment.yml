@@ -1,0 +1,31 @@
+pt-BR:
+  activerecord:
+    models:
+      comment:
+        one: Comentário
+        other: Comentários
+    attributes:
+      comment:
+        name: Nome
+        comment: Comentário
+        post_id: Postagem
+    errors:
+      models:
+        comment:
+          not_found: Comentário não encontrada
+
+en:
+  activerecord:
+    models:
+      comment:
+        one: Comment
+        other: Comments
+    attributes:
+      comment:
+        name: Name
+        comment: Comment
+        post_id: Post
+    errors:
+      models:
+        comment:
+          not_found: Comment not found
