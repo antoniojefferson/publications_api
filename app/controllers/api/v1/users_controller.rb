@@ -2,6 +2,7 @@ module Api
   module V1
     class UsersController < ApplicationController
       before_action :set_user, except: %i[create index]
+      before_action :jwt_auth_validation, except: %i[index show]
 
       def index
         @users = User.all
