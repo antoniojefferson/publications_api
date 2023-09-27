@@ -1,0 +1,31 @@
+pt-BR:
+  activerecord:
+    models:
+      post:
+        one: Publicação
+        other: Publicações
+    attributes:
+      post:
+        title: Título
+        text: Texto
+        user_id: Usuário
+    errors:
+      models:
+        post:
+          not_found: Publicação não encontrada
+
+en:
+  activerecord:
+    models:
+      post:
+        one: Publication
+        other: Publications
+    attributes:
+      post:
+        title: Title
+        text: Text
+        user_id: User
+    errors:
+      models:
+        post:
+          not_found: Post not found

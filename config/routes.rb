@@ -5,6 +5,7 @@ Rails.application.routes.draw do
         post :sign_in, defaults: { format: :json }
       end
 
+      resources :posts, defaults: { format: :json }
       resources :users, defaults: { format: :json }
     end
   end
